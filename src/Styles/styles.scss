@@ -13,6 +13,18 @@
     background-color: #007efe;
   }
 
+  .error{
+    color: red;
+    background-color: black;
+    width: 80%;
+    margin-left: 10%;
+    text-align: center;
+    height: 50px;
+    margin-top: 10px;
+    padding: 0.5px;
+    border-radius: 5px;
+  }
+
   .modalContainer{
     position: fixed;
   top: 0;
@@ -27,12 +39,17 @@
 
    .modal{
     background-color: #66b3fe;
-    padding: 20px 40px;
+    padding: 20px 20px;
     border-radius: 10px;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 
     .close{
-      margin-left: 100px;
+      margin-left: 120px;
+    }
+
+    .close:hover{
+      color: red;
+      transition: 0.15s;
     }
   }
   }

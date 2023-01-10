@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ProductTable from './Components/Table';
+import Error from './Components/Error';
+import Table from './Components/Table';
 
 
 interface Product {
@@ -10,11 +11,16 @@ interface Product {
     year: number;
     color: string;
   }
+
+  type MyExpectedResponseType = {
+    thisIsANumber: number;
+  };
   
   const Home: React.FC = () => {
   
     const [products, setProducts] = useState<Product[]>([]);
     const [filter, setFilter] = useState('');
+    const [err, setErr] = useState<string | null>(null);
     const navigate = useNavigate()
   
     useEffect(() => {
@@ -22,8 +28,12 @@ interface Product {
         try {
           const response = await axios.get('https://reqres.in/api/products');
           setProducts(response.data.data);
-        } catch (error) {
-          console.log(error);
+          console.log(response)
+        } catch(error : unknown) {
+            if (isAxiosError<MyExpectedResponseType>(error)) {
+                console.log(error.message);  
+                setErr(error.message);
+          }
         }
       };
       fetch();
@@ -43,14 +53,16 @@ interface Product {
             type='number'
             className='filter'
             value={filter}
-            onChange={handleFilterChange}/>
+            onChange={handleFilterChange}
+            />
+        {err && <Error msg={err} />}
         <div className='tableContainer'>
           <div className="tableLabel">
                 <h3 className="id">Id</h3>
                 <h3 className="id">Name</h3>
                 <h3 className="name">Year</h3>
             </div>
-            <ProductTable products={products} filter={filter} filterProducts={filteredProducts}/>
+            <Table products={products} filter={filter} filterProducts={filteredProducts}/>
     </div>
     </>
   );
